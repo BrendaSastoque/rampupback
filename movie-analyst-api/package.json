@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
+<<<<<<< HEAD
     "start": "EXPORT NODE_ENV=dev && node server.js"
+=======
+    "start": "SET NODE_ENV=dev &&  node server.js"
+>>>>>>> b67c393b99d4b7feacfd14f2ca21971d56c376cb
   },
   "repository": {
     "type": "git",
