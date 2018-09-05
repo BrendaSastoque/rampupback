@@ -1,0 +1,38 @@
+pipeline{
+	agent any
+	stages{
+		stage('Build'){
+			steps{
+				script{
+				backimage = docker.build("brendasastoque/backimg")
+				}
+				echo "Built"
+			}     
+		}
+		stage ('Push image'){
+			steps {
+				script {
+					docker.withRegistry('https://registry.hub.docker.com','docker-hub-credentials'){
+						backimage.push("${env.BUILD_NUMBER}")
+						backimage.push("latest")
+					}
+				}
+			}
+		}
+		stage ('Test'){
+			steps {
+				echo "Tested"
+			}
+		}
+		stage ('Deploy'){
+			steps {
+				sshagent(credentials : ['key-ssh']){
+					sh "ssh -v -o StrictHostKeyChecking=no ec2-user@ip-10-0-3-57 'docker stop conback ; docker rm conback ; docker rmi registry.hub.docker.com/brendasastoque/backimg ; docker run --name conback -p 3000:3000 -d registry.hub.docker.com/brendasastoque/backimg'"
+				}
+					echo "Deployed"
+				
+			}
+		}
+		
+	}
+}
