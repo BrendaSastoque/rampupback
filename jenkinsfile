@@ -4,7 +4,7 @@ pipeline{
 		stage('Build'){
 			steps{
 				script{
-				frontimage = docker.build("brendasastoque/backimg")
+				backimage = docker.build("brendasastoque/backimg")
 				}
 				echo "Built"
 			}     
@@ -13,8 +13,8 @@ pipeline{
 			steps {
 				script {
 					docker.withRegistry('https://registry.hub.docker.com','docker-hub-credentials'){
-						frontimage.push("${env.BUILD_NUMBER}")
-						frontimage.push("latest")
+						backimage.push("${env.BUILD_NUMBER}")
+						backimage.push("latest")
 					}
 				}
 			}
